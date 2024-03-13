@@ -5,6 +5,7 @@ import AnswersRoute from "./routes/AnswersRoute.js";
 import CommentRoute from "./routes/CommentRoute.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 
 
 dotenv.config();
@@ -12,6 +13,7 @@ const mongourl=process.env.mongo_url;
 const Port = process.env.PORT;
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 
 // async function connection(){
