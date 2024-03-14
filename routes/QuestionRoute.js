@@ -1,4 +1,4 @@
-import  express, { response }  from "express";
+import  express, { request, response }  from "express";
 import QuestionDB from "../model/Question.js";
 
 
@@ -52,8 +52,45 @@ router.post('/', async function ( req , res){
       .exec()
       .then((resa)=>res.status(200).send(resa))
       .catch((err)=>res.status(404).send(err));
-    })
+    });
 
+
+    router.get("/:id", async function (req,res){
+      const {id} =request.params;
+      await QuestionDB.aggregate([
+         { $match: { _id: mongoose.Types.ObjectId(id) } },
+
+         {
+            $lookup:{
+               from:"answers",
+               //localfield:_id;
+               //foriegnfield:question_id;
+               let:{question_id:"$_id"},
+               pipeline:[
+                  {$match:{$expr:{$eq:["$question_id","$$question_id"]}}},
+                  {$project:{question_id:0,__v:0}},
+               ],
+               as:"answers",
+               
+
+            },
+         },
+         {
+            $lookup:{
+               from:"comments",
+               let:{question_id:"$_id"},
+               pipeline:[
+                  {$match:{$expr:{$eq:["$question_id","$$question_id"]}}},
+                  {$project:{question_id:0,__v:0}},
+               ],
+               as:"comments"
+            },
+         }
+      ])
+      .exec()
+      .then((resa)=>res.status(200).send(resa))
+      .catch((err)=>res.status(404).send(err));
+    })
 
 
     export default router;
