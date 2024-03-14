@@ -10,7 +10,7 @@ import cors from "cors";
 
 dotenv.config();
 const mongourl=process.env.mongo_url;
-const Port = process.env.PORT;
+const PORT = process.env.PORT;
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -39,6 +39,6 @@ app.get('/', function (req, res) {
 
 app.use("/questions",QuestionRoute);
 app.use("/answer",AnswersRoute);
-app.use("/comments",CommentRoute)
+app.use("/comments",CommentRoute);
 
-app.listen(Port);
+app.listen(4000);

@@ -56,7 +56,7 @@ router.post('/', async function ( req , res){
 
 
     router.get("/:id", async function (req,res){
-      const {id} =request.params;
+      const {id} =req.params;
       await QuestionDB.aggregate([
          { $match: { _id: mongoose.Types.ObjectId(id) } },
 
@@ -88,7 +88,7 @@ router.post('/', async function ( req , res){
          }
       ])
       .exec()
-      .then((resa)=>res.status(200).send(resa))
+      .then((response)=>res.status(200).send(response))
       .catch((err)=>res.status(404).send(err));
     })
 
